@@ -3,7 +3,6 @@ from flask.ext.login import UserMixin
 
 from app import db, bcrypt
 
-
 class User(db.Model, UserMixin):
 
     ''' A user who has an account on the website. '''
@@ -35,3 +34,41 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self.email
 
+
+class Queue(db.Model):
+    ''' A queue is the represention of the waiting line '''
+
+    __tablename__ = 'queue'
+
+    id = db.Column(db.Integer, primary_key=True)
+    service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
+    service = db.relationship("Service", back_populates="queue")
+    
+
+
+
+class Service(db.Model):
+
+    __tablename__ = 'service'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True)
+    organisation_id = db.Column(db.Integer, db.ForeignKey('organisation.id'))
+    organisation = db.relationship("Organisation", back_populates="service")
+    queue = db.relationship("Queue")
+
+    def __str__(self):
+        return self.name
+
+class Organisation(db.Model):
+    ''' Organisation Model '''
+
+    __tablename__ = 'organisation'
+    inline_models = (Service,  dict(form_columns=['name']))
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True)
+    service = db.relationship('Service')
+
+    def __str__(self):
+        return self.name
