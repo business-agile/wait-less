@@ -61,7 +61,7 @@ class Guest(db.Model):
     __tablename__ = 'guest'
 
     id = db.Column(db.Integer, unique=True)
-    phone = db.Column(db.String, primary_key=True)
+    phone = db.Column(db.String)
     guest_mac = db.Column(db.String)
     # last_ip = 
     request = db.relationship("Request")
@@ -150,4 +150,11 @@ class Request(db.Model):
     status_id = db.Column(db.Integer, db.ForeignKey('request_status.id'))
     status = db.relationship("RequestStatus")
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def as_dict(self):
+        """Prepare ORM object for serialization"""
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    def __str__(self):
+        return self.rtype.name + " request #" + self.id
 
