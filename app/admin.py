@@ -22,8 +22,13 @@ class ModelView(ModelView):
             ))
         return True
 
+class GuestView(ModelView):
+    form_columns = ('phone', 'guest_mac', 'request')
+    column_display_pk = True
+
+
 # Users
-admin.add_view(ModelView(Guest, db.session))
+admin.add_view(GuestView(Guest, db.session))
 admin.add_view(ModelView(Request, db.session))
 admin.add_view(ModelView(RequestType, db.session))
 admin.add_view(ModelView(RequestStatus, db.session))

@@ -61,26 +61,28 @@ class Guest(db.Model):
     __tablename__ = 'guest'
 
     id = db.Column(db.Integer, unique=True)
-    phone = db.Column(db.String)
+    phone = db.Column(db.String, primary_key=True)
     guest_mac = db.Column(db.String)
     # last_ip = 
     request = db.relationship("Request")
 
+    def __repr__(self):
+        self.request.id
 
 
 
 class Service(db.Model):
 
     __tablename__ = 'service'
-
+    
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True)
     organisation_id = db.Column(db.Integer, db.ForeignKey('organisation.id'))
     organisation = db.relationship("Organisation", back_populates="service")
     request_type = db.relationship("RequestType")
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
 class Organisation(db.Model):
     ''' Organisation Model '''
@@ -110,6 +112,9 @@ class RequestStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
 
+    def __repr__(self):
+        return self.title
+
 class RequestType(db.Model):
     '''
     RequestType is :
@@ -128,6 +133,9 @@ class RequestType(db.Model):
     # guest_description =
     service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
     service = db.relationship("Service", back_populates="request_type")
+
+    def __repr__(self):
+        return self.title
 
 
 class Request(db.Model):
