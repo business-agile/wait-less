@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    {{super()}}
+{% endblock %}
+{% block content %}
+    <div class="ui vertical steps">
+    <a class="completed step">
+        <i class="truck icon"></i>
+        <div class="content">
+    <div class="title">Inscription dans la file</div>
+    <div class="description">#1{{request.id}}</div>
+        </div>
+    </a>
+    <a class="active step">
+        <i class="payment icon"></i>
+        <div class="content">
+    <div class="title">Attente</div>
+    <div class="description">12 personnes devant vous</div>
+        </div>
+    </a>
+    <a class="next step">
+        <i class="user icon"></i>
+        <div class="content">
+    <div class="title">Prise en charge</div>
+    <div class="description"></div>
+        </div>
+    </a>
+    </div>
+{% endblock %}
