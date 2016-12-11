@@ -1,6 +1,6 @@
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, redirect
 from app import app, models, db
-from app.models import RequestType, Service
+from app.models import RequestType, Service, Guest
 import random
 import requests
 
@@ -29,19 +29,30 @@ def contact():
 
 @app.route('/meraki/redirect', methods=['POST'])
 def meraki_redirect():
-    pass
+    phonenumber = request.form.get('phonenumber')
+    macaddr = request.form.get('macaddr')
+    retype = request.form.get('type')
+    redirect_url = request.form.get('redirect_url')
+    guest = models.Guest(phone=phonenumber, guest_mac=macaddr)
+    db.session.add(guest)
+    db.session.commit()
+    # ins = db.session.query(models.Guest).insert().values(phone=phonenumber, macaddress=macaddr, rtype=retype)
+    return jsonify({'url': redirect_url})
+    # return redirect(redirect_url, code=302)
 
 @app.route('/meraki', methods=['GET'])
 def meraki():
     udata = {}
     udata['grant_url'] = request.args.get('base_grant_url')
-    udata['continue_url'] = request.args.get('user_grant_url')
+    udata['continue_url'] = request.args.get('user_continue_url')
     udata['node_mac'] = request.args.get('node_mac')
     udata['client_ip'] = request.args.get('client_ip')
     udata['client_mac'] = request.args.get('client_mac')
     udata['redirect_url'] = str(udata['grant_url']) + str("&continue_url=") + str(udata['continue_url'])
     services = db.session.query(Service).all()
-    return render_template('guest/portal.html', data=udata, services=services)
+    guest = db.session.query(Guest).filter_by(guest_mac=udata['client_mac']).first()
+    # print(guest)
+    return render_template('guest/portal.html', data=udata, services=services, guest=guest)
 
 @app.route("/sms", methods=['GET'])
 def sms():

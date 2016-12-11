@@ -60,14 +60,20 @@ class Guest(db.Model):
 
     __tablename__ = 'guest'
     inline_models = [Ticket]
-    id = db.Column(db.Integer, unique=True)
-    phone = db.Column(db.String, primary_key=True)
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    phone = db.Column(db.String, unique=True)
     guest_mac = db.Column(db.String)
     # last_ip = 
     request = db.relationship("Request")
 
+    # def __init__(self, phone, guest_mac):
+    #     self.phone = phone
+    #     self.guest_mac = guest_mac
+
     def __repr__(self):
         self.request.id
+
+
 
 
 
@@ -165,3 +171,7 @@ class Request(db.Model):
 
     def __str__(self):
         return self.rtype.name + " request #" + self.id
+
+
+db.drop_all()
+db.create_all()
