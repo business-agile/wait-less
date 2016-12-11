@@ -59,7 +59,7 @@ class Guest(db.Model):
      '''
 
     __tablename__ = 'guest'
-
+    inline_models = [Ticket]
     id = db.Column(db.Integer, unique=True)
     phone = db.Column(db.String, primary_key=True)
     guest_mac = db.Column(db.String)
@@ -79,7 +79,7 @@ class Service(db.Model):
     name = db.Column(db.String, unique=True)
     organisation_id = db.Column(db.Integer, db.ForeignKey('organisation.id'))
     organisation = db.relationship("Organisation", back_populates="service")
-    request_type = db.relationship("RequestType")
+    request_type = db.relationship("RequestType", back_populates="service")
 
     def __str__(self):
         return self.name

@@ -1,0 +1,28 @@
+{% block content %}
+
+
+<h1>Welcome {{ data.client_ip }} !</h1>
+<hr />
+
+<form method="POST" action="/meraki/redirect">
+
+    <input type="phone" name="phonenumber" placeholder="+336XXXXXXXX" /><br /><br />
+
+    <select name="request">
+    {% for service in services %} 
+        <optgroup label="service.name">
+        {% for r in service.request_type %}
+            <option value="{{r.id}}">
+            ({{r.service}}) - {{r}}
+            </option>
+        {% endfor %}
+        </optgroup>
+    {% endfor %}
+    </select>
+    <br />
+    <br />
+    <button type="submit">Fini !</button> 
+</form>
+
+
+{% endblock %}

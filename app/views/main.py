@@ -1,5 +1,6 @@
-from flask import render_template, jsonify
-from app import app
+from flask import render_template, jsonify, request
+from app import app, models, db
+from app.models import RequestType
 import random
 
 
@@ -25,3 +26,19 @@ def map_refresh():
 @app.route('/contact')
 def contact():
     return render_template('contact.html', title='Contact')
+
+@app.route('/meraki/redirect', methods=['POST'])
+def meraki_redirect():
+    pass
+
+@app.route('/meraki', methods=['GET'])
+def meraki():
+    udata = {}
+    udata['grant_url'] = request.args.get('base_grant_url')
+    udata['continue_url'] = request.args.get('user_grant_url')
+    udata['node_mac'] = request.args.get('node_mac')
+    udata['client_ip'] = request.args.get('client_ip')
+    udata['client_mac'] = request.args.get('client_mac')
+    udata['redirect_url'] = unicode(udata['grant_url']) + unicode("&continue_url=") + unicode(udata['continue_url'])
+    request_type = db.session.query(RequestType).all()
+    return render_template('guest/portal.html', data=udata, request_type=request_type)
