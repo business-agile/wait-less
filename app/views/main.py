@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, redirect
 from app import app, models, db
 from app.models import RequestType
 import random
@@ -29,7 +29,16 @@ def contact():
 
 @app.route('/meraki/redirect', methods=['POST'])
 def meraki_redirect():
-    pass
+    phonenumber = request.args.get('phonenumber')
+    macaddr = request.args.get('macaddr')
+    retype = request.args.get('type')
+    redirect_url = request.args.get('redirect_url')
+    guest = models.Guest(phone=phonenumber, guest_mac=macaddr)
+    db.session.add(guest)
+    db.session.commit()
+    # ins = db.session.query(models.Guest).insert().values(phone=phonenumber, macaddress=macaddr, rtype=retype)
+    return jsonify({'url': redirect_url})
+    # return redirect(redirect_url, code=302)
 
 @app.route('/meraki', methods=['GET'])
 def meraki():
