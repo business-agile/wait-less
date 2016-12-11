@@ -1,6 +1,6 @@
 from flask import render_template, jsonify, request
 from app import app, models, db
-from app.models import RequestType
+from app.models import RequestType, Service
 import random
 
 
@@ -40,5 +40,5 @@ def meraki():
     udata['client_ip'] = request.args.get('client_ip')
     udata['client_mac'] = request.args.get('client_mac')
     udata['redirect_url'] = unicode(udata['grant_url']) + unicode("&continue_url=") + unicode(udata['continue_url'])
-    request_type = db.session.query(RequestType).all()
-    return render_template('guest/portal.html', data=udata, request_type=request_type)
+    services = db.session.query(Service).all()
+    return render_template('guest/portal.html', data=udata, services=services)
