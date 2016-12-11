@@ -7,7 +7,7 @@ from flask.ext.admin.contrib.sqla import ModelView
 from flask_admin.model.form import InlineFormAdmin
 
 from app import app, db
-from app.models import User, Organisation, Service
+from app.models import User, Organisation, Service, RequestType, RequestStatus, Guest, Request
 
 
 admin = Admin(app, name='Admin', template_mode='bootstrap3')
@@ -23,10 +23,11 @@ class ModelView(ModelView):
         return True
 
 # Users
-admin.add_view(ModelView(User, db.session))
-
-
-
-admin.add_view(ModelView(Organisation, db.session))
+admin.add_view(ModelView(Guest, db.session))
+admin.add_view(ModelView(Request, db.session))
+admin.add_view(ModelView(RequestType, db.session))
+admin.add_view(ModelView(RequestStatus, db.session))
 admin.add_view(ModelView(Service, db.session))
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Organisation, db.session))
 
