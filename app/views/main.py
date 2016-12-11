@@ -2,7 +2,7 @@ from flask import render_template, jsonify, request
 from app import app, models, db
 from app.models import RequestType, Service
 import random
-
+import requests
 
 @app.route('/')
 @app.route('/index')
