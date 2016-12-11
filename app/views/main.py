@@ -75,7 +75,7 @@ def meraki():
     udata = {}
     udata['grant_url'] = request.args.get('base_grant_url')
     # udata['continue_url'] = request.args.get('user_continue_url')
-    udate['continue_url'] = 'http://wait.thekey.pw/guest/2342423'
+    udata['continue_url'] = 'http://wait.thekey.pw/guest/2342423'
     udata['node_mac'] = request.args.get('node_mac')
     udata['client_ip'] = request.args.get('client_ip')
     udata['client_mac'] = request.args.get('client_mac')
