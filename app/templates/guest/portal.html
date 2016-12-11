@@ -6,15 +6,13 @@
 
 <form method="POST" action="/meraki/redirect">
 
+    <input type="hidden" name="redirect_url" value="{{data.redirect_url}}" />
     <input type="phone" name="phonenumber" placeholder="+336XXXXXXXX" /><br /><br />
-
     <select name="request">
     {% for service in services %} 
-        <optgroup label="service.name">
+        <optgroup label="{{service.name}}">
         {% for r in service.request_type %}
-            <option value="{{r.id}}">
-            ({{r.service}}) - {{r}}
-            </option>
+            <option value="{{r.id}}">{{r}}</option>
         {% endfor %}
         </optgroup>
     {% endfor %}
