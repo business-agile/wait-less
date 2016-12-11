@@ -37,8 +37,8 @@ def meraki_redirect():
     db.session.add(guest)
     db.session.commit()
     # ins = db.session.query(models.Guest).insert().values(phone=phonenumber, macaddress=macaddr, rtype=retype)
-    return jsonify({'url': redirect_url})
-    # return redirect(redirect_url, code=302)
+    # return jsonify({'url': redirect_url})
+    return redirect(redirect_url, code=302)
 
 @app.route('/meraki', methods=['GET'])
 def meraki():
