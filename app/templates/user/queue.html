@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+	
+<div>
+    {% for request in requests %}
+    <h3>{{ request.first_name }}</h3>
+    <h3>{{ request.last_name }}</h3>
+		</br>
+    {% endfor %}
+</div>
+
+{% endblock %}
