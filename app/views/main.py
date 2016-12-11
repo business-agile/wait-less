@@ -42,3 +42,13 @@ def meraki():
     udata['redirect_url'] = unicode(udata['grant_url']) + unicode("&continue_url=") + unicode(udata['continue_url'])
     services = db.session.query(Service).all()
     return render_template('guest/portal.html', data=udata, services=services)
+
+@app.route("/sms", methods=['GET'])
+def sms():
+	udata = {}
+	number = request.args.get('number')
+	text = request.args.get('text')
+	token = ''
+	api_url = 'https://api.tropo.com/1.0/sessions?action=create&token=4f5677505477586774596461677670695a46756d786878566f446541436d4c79796e634a7368556d57635274&myString='+text+'&myNumber='+number
+	return jsonify({'url': api_url})
+
