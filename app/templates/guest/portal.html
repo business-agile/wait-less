@@ -1,38 +1,43 @@
 {% block content %}
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Bienvenue !</h1>
+        <hr />
+        <h2>Inscrivez-vous dans la file d'attente :</h2>
+        <form method="POST" action="/meraki/redirect">
 
+            <input type="hidden" name="redirect_url" value="{{data.redirect_url}}" />
+            <input type="hidden" name="macaddr" value="{{data.client_mac}}" />
+            {% if guest.guest_mac == data.client_mac %}
+            <h3>Votre numéro est déjà enregistré : {{ guest.phone }}</h3>
+            {% else %}
+            <label for="phonenumber">Téléphone</label>
+            <input type="phone" name="phonenumber" placeholder="+336XXXXXXXX" required /><br /><br />
+            {% endif %}
+            <label for="request">Vous êtes ici pour </label>
+            <select name="request">
+            {% for service in services %} 
+                <optgroup label="{{service.name}}">
+                {% for r in service.request_type %}
+                    <option value="{{r.id}}">{{r}}</option>
+                {% endfor %}
+                </optgroup>
+            {% endfor %}
+            </select>
+            <br />
+            <br />
+            <button type="submit">Fini !</button> 
+        </form>
 
-<h1>Bienvenue !</h1>
-<hr />
-<h2>Inscrivez-vous dans la file d'attente :</h2>
-<form method="POST" action="/meraki/redirect">
-
-    <input type="hidden" name="redirect_url" value="{{data.redirect_url}}" />
-    <input type="hidden" name="macaddr" value="{{data.client_mac}}" />
-    {% if guest.guest_mac == data.client_mac %}
-    <h3>Votre numéro est déjà enregistré : {{ guest.phone }}</h3>
-    {% else %}
-    <input type="phone" name="phonenumber" placeholder="+336XXXXXXXX" /><br /><br />
-    {% endif %}
-    <h3>Nouvelle demande ?</h3>
-    <select name="request">
-    {% for service in services %} 
-        <optgroup label="{{service.name}}">
-        {% for r in service.request_type %}
-            <option value="{{r.id}}">{{r}}</option>
-        {% endfor %}
-        </optgroup>
-    {% endfor %}
-    </select>
-    <br />
-    <br />
-    <button type="submit">Fini !</button> 
-</form>
-
-<div style="font-size:80%;">
-<p>Vos infos : </p>
-<p>MAC : {{data.client_mac}}<br />
-IP : {{data.client_ip}}
-URL : {{data.redirect_url}}
-</p>
-</div>
+        <div style="font-size:80%;">
+            <p>Vos infos : </p>
+            <p>MAC : {{data.client_mac}}<br />
+            IP : {{data.client_ip}}<br />
+            URL : {{data.redirect_url}}
+            </p>
+        </div>
+    </body>
+</html>
 {% endblock %}

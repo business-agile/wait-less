@@ -3,6 +3,7 @@ from app import app, models, db
 from app.models import RequestType, Service, Guest
 import random
 import requests
+import json
 
 @app.route('/')
 @app.route('/index')
@@ -27,6 +28,27 @@ def map_refresh():
 def contact():
     return render_template('contact.html', title='Contact')
 
+import urllib
+
+def sms(number, text):
+    udata = {}
+    number =  number
+    text = text
+    token = '4f5677505477586774596461677670695a46756d786878566f446541436d4c79796e634a7368556d57635274'
+    query = {
+        'action': 'create',
+        'token': token,
+        'myString': text,
+        'myNumber': number
+    }
+    api_url = 'https://api.tropo.com/1.0/sessions?'
+    api_url = api_url + urllib.urlencode(query)
+    print api_url
+    req = requests.get(api_url)
+    print req.text  
+    return req.status_code
+
+
 @app.route('/meraki/redirect', methods=['POST'])
 def meraki_redirect():
     phonenumber = request.form.get('phonenumber')
@@ -36,15 +58,24 @@ def meraki_redirect():
     guest = models.Guest(phone=phonenumber, guest_mac=macaddr)
     db.session.add(guest)
     db.session.commit()
+    robj = models.Request(guest=guest, rtype_id=retype, status_id=1)
+    db.session.add(robj)
+    db.session.commit()
+    granted_msg = "Position : " + str(robj.id) + " - " + "wait.thekey.pw/guest/" + phonenumber
+    # granted_msg += " | Pour traquer la file d'attente en temps reel : "
+    # granted_msg += "http://wait.thekey.pw/guest/" + phonenumber
     # ins = db.session.query(models.Guest).insert().values(phone=phonenumber, macaddress=macaddr, rtype=retype)
     # return jsonify({'url': redirect_url})
+    print granted_msg
+    sms(phonenumber, granted_msg)
     return redirect(redirect_url, code=302)
 
 @app.route('/meraki', methods=['GET'])
 def meraki():
     udata = {}
     udata['grant_url'] = request.args.get('base_grant_url')
-    udata['continue_url'] = request.args.get('user_continue_url')
+    # udata['continue_url'] = request.args.get('user_continue_url')
+    udate['continue_url'] = 'http://wait.thekey.pw/guest/2342423'
     udata['node_mac'] = request.args.get('node_mac')
     udata['client_ip'] = request.args.get('client_ip')
     udata['client_mac'] = request.args.get('client_mac')
@@ -54,12 +85,13 @@ def meraki():
     
     return render_template('guest/portal.html', data=udata, services=services, guest=guest)
 
-@app.route("/sms", methods=['GET'])
-def sms():
-	udata = {}
-	number = request.args.get('number')
-	text = request.args.get('text')
-	token = ''
-	api_url = 'https://api.tropo.com/1.0/sessions?action=create&token=4f5677505477586774596461677670695a46756d786878566f446541436d4c79796e634a7368556d57635274&myString='+text+'&myNumber='+number
-	return jsonify({'url': api_url})
 
+
+
+# @app.route("/sms", methods=['POST'])
+
+
+@app.route("/guest/<phonenumber>")
+def guest_status(phonenumber):
+
+    return render_template('guest/status.html')
