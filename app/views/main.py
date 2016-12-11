@@ -39,7 +39,7 @@ def meraki():
     udata['node_mac'] = request.args.get('node_mac')
     udata['client_ip'] = request.args.get('client_ip')
     udata['client_mac'] = request.args.get('client_mac')
-    udata['redirect_url'] = unicode(udata['grant_url']) + unicode("&continue_url=") + unicode(udata['continue_url'])
+    udata['redirect_url'] = str(udata['grant_url']) + str("&continue_url=") + str(udata['continue_url'])
     services = db.session.query(Service).all()
     return render_template('guest/portal.html', data=udata, services=services)
 
