@@ -151,5 +151,9 @@ class Request(db.Model):
     status = db.relationship("RequestStatus")
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+    def as_dict(self):
+        """Prepare ORM object for serialization"""
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
     def __str__(self):
         return self.rtype.name + " request #" + self.id

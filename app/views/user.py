@@ -5,6 +5,7 @@ from itsdangerous import URLSafeTimedSerializer
 from app import app, models, db
 from app.forms import user as user_forms
 from app.toolbox import email
+import json
 
 # Serializer for generating random tokens
 ts = URLSafeTimedSerializer(app.config['SECRET_KEY'])
@@ -148,3 +149,18 @@ def reset(token):
             flash('Unknown email address.', 'negative')
             return redirect(url_for('userbp.forgot'))
     return render_template('user/reset.html', form=form, token=token)
+
+@userbp.route('/queue')
+def queue():
+    requests = db.session.query(models.Request).all()
+    tab = []
+    for r in requests:
+        r = r.as_dict()
+        r.pop("_password")
+        tab.append(r)
+    return (json.dumps(tab))
+
+
+
+
+
