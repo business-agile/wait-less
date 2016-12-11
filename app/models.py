@@ -157,4 +157,3 @@ class Request(db.Model):
 
     def __str__(self):
         return self.rtype.name + " request #" + self.id
-
