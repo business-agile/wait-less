@@ -12,6 +12,8 @@
             <input type="hidden" name="macaddr" value="{{data.client_mac}}" />
             {% if guest.guest_mac == data.client_mac %}
             <h3>Votre numéro est déjà enregistré : {{ guest.phone }}</h3>
+            <a href="/guest/{{guest.phone}}">Mon espace</a>
+            <a href="">Se déconnecter(bientôt)</a>
             {% else %}
             <label for="phonenumber">Téléphone</label>
             <input type="phone" name="phonenumber" placeholder="+336XXXXXXXX" required /><br /><br />

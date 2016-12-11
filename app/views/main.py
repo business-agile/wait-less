@@ -79,7 +79,7 @@ def meraki():
     udata['node_mac'] = request.args.get('node_mac')
     udata['client_ip'] = request.args.get('client_ip')
     udata['client_mac'] = request.args.get('client_mac')
-    udata['redirect_url'] = str(udata['grant_url']) + str("?continue_url=") + str(udata['continue_url'])
+    udata['redirect_url'] = str(udata['grant_url']) + str("?continue_url=") + str(udata['continue_url'] + "&duration=300")
     services = db.session.query(Service).all()
     guest = db.session.query(Guest).filter_by(guest_mac=udata['client_mac']).first()
     
